@@ -10,6 +10,16 @@ usage() {
 	    - minimal-ui - Config for a simpler UI.
 	    - ivy - Config for Ivy completion framework.
 	    - evil - Config for Evil mode.
+
+Examples:
+	emacs-sandbox.sh -i straight -i evil
+	# Creates the default 'sandbox' environment with 'straight'
+	# and 'evil' configuration.
+
+	emacs-sandbox.sh -n super-secret -i melpa -i straight -i ivy
+	# Creates the named 'super-secret' environment with 'melpa'
+	# 'straight' and 'ivy' configuration.
+
 " 1>&2;
     exit 1;
 }
