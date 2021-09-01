@@ -1,26 +1,19 @@
 #!/bin/bash
 
 usage() {
-    printf "Usage: emacs-sandbox.sh <sandbox-slug>
+    printf "Usage: emacs-sandbox.sh [-h|[-n name]]
        h    Print this help.
+       n    Name of the environment to load.
 " 1>&2;
     exit 1;
 }
 
-if [ $# -eq 0 ]; then
-    usage 
-    exit 1
-fi
-
-SLUG="$1"
-EMACS_QA_FOLDER="${HOME}/.emacs.${SLUG}.d"
-EMACS_QA_INIT="${EMACS_QA_FOLDER}/init.el"
-
+NAME="sandbox"
 
 create_sandbox() {
     mkdir $EMACS_QA_FOLDER && touch $EMACS_QA_INIT && (cat << EOF 
 ;; Use our custom Emacs directory
-(setq user-emacs-directory "~/.emacs.${SLUG}.d/")
+(setq user-emacs-directory "~/.emacs.${NAME}.d/")
 
 ;; Include Melpa so we can install packages with:
 ;;
@@ -38,16 +31,21 @@ EOF
     
 }
 
-while getopts ':h' option; do
+while getopts ':hn:' option; do
     case $option in
 	h) # Display help
 	    usage
 	    exit;;
+	n) # Name option
+	    NAME=$OPTARG;;
 	\?) # Invalid Option
 	    echo "Invalid option"
 	    exit;;
     esac
 done
+
+EMACS_QA_FOLDER="${HOME}/.emacs.${NAME}.d"
+EMACS_QA_INIT="${EMACS_QA_FOLDER}/init.el"
 
 if [ ! -d $EMACS_QA_FOLDER ]; then
     create_sandbox
