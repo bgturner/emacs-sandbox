@@ -6,6 +6,7 @@ usage() {
        n    Name of the environment to load.
        i    Include a configuration. Available configurations are:
        	    - melpa - Include configuration for melpa.
+       	    - straight - Include configuration for straight.
 " 1>&2;
     exit 1;
 }
@@ -38,6 +39,28 @@ EOF
 	 ) >> $EMACS_QA_INIT
 }
 
+include_straight() {
+    (cat <<EOF
+;; Allow Straight to manage our packages
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
+
+EOF
+     ) >> $EMACS_QA_INIT
+}
+
 while getopts ':hn:i:' option; do
     case $option in
 	h) # Display help
@@ -65,6 +88,8 @@ if [ ! -d $EMACS_QA_FOLDER ]; then
 	case $config in
 	    melpa)
 		include_melpa;;
+	    straight)
+		include_straight;;
 	esac
     done
 fi
