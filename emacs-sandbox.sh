@@ -1,7 +1,9 @@
 #!/bin/bash
 
 usage() {
-    printf "Usage: emacs-sandbox.sh <sandbox-slug>" 1>&2;
+    printf "Usage: emacs-sandbox.sh <sandbox-slug>
+       h    Print this help.
+" 1>&2;
     exit 1;
 }
 
@@ -35,6 +37,17 @@ EOF
 	 ) >> $EMACS_QA_INIT
     
 }
+
+while getopts ':h' option; do
+    case $option in
+	h) # Display help
+	    usage
+	    exit;;
+	\?) # Invalid Option
+	    echo "Invalid option"
+	    exit;;
+    esac
+done
 
 if [ ! -d $EMACS_QA_FOLDER ]; then
     create_sandbox
