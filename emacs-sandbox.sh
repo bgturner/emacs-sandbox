@@ -9,6 +9,7 @@ usage() {
        	    - straight - Include configuration for straight.
 	    - minimal-ui - Config for a simpler UI.
 	    - ivy - Config for Ivy completion framework.
+	    - evil - Config for Evil mode.
 " 1>&2;
     exit 1;
 }
@@ -113,6 +114,29 @@ EOF
      ) >> $EMACS_QA_INIT
 }
 
+include_evil() {
+    (cat <<EOF
+;; Evil Package
+(use-package evil
+  :init
+  (setq evil-want-C-i-jump nil) ;; Fix tab key in org-mode
+  :config
+  (evil-mode 1)
+  (use-package evil-surround
+    :init
+    (global-evil-surround-mode 1))
+  (use-package evil-commentary
+    :delight
+    :init
+    (evil-commentary-mode))
+  (use-package evil-matchit
+    :init
+    (global-evil-matchit-mode 1)))
+
+EOF
+     ) >> $EMACS_QA_INIT
+}
+
 while getopts ':hn:i:' option; do
     case $option in
 	h) # Display help
@@ -146,6 +170,8 @@ if [ ! -d $EMACS_QA_FOLDER ]; then
 		include_minimalui;;
 	    ivy)
 		include_ivy;;
+	    evil)
+		include_evil;;
 	esac
     done
 fi
