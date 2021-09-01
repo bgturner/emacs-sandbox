@@ -7,6 +7,7 @@ usage() {
        i    Include a configuration. Available configurations are:
        	    - melpa - Include configuration for melpa.
        	    - straight - Include configuration for straight.
+	    - minimal-ui - Config for a simpler UI.
 " 1>&2;
     exit 1;
 }
@@ -61,6 +62,19 @@ EOF
      ) >> $EMACS_QA_INIT
 }
 
+include_minimalui() {
+    (cat <<EOF
+;; Minimal UI
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(menu-bar-mode -1)
+(setq inhibit-startup-screen t)
+
+EOF
+     ) >> $EMACS_QA_INIT
+}
+
 while getopts ':hn:i:' option; do
     case $option in
 	h) # Display help
@@ -90,6 +104,8 @@ if [ ! -d $EMACS_QA_FOLDER ]; then
 		include_melpa;;
 	    straight)
 		include_straight;;
+	    minimal-ui)
+		include_minimalui;;
 	esac
     done
 fi
