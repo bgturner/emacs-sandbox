@@ -53,4 +53,4 @@
 
    #+end_example
 
-   ![Screencast of basic usage](emacs-sandbox.gif)
+   [[emacs-sandbox.gif]]
