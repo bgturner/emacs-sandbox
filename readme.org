@@ -1,0 +1,56 @@
+* Emacs Sandbox
+
+  A simple bash script to help quickly create and launch a minimal Emacs sandbox.
+
+** Installation
+
+   Everything is contained within the one =emacs-sandbox.sh= file, so somehow get that into your PATH.
+
+   One way to do that would be to:
+
+   1. Clone this repo to your local machine.
+   2. Create a Symlink from =emacs-sandbox.sh= to a folder already in your path.
+
+
+   Because I already have =~/bin= in my PATH, those commands might look like:
+
+   #+begin_src shell
+     mkdir -p ~/src && cd ~/src
+     git clone https://github.com/bgturner/emacs-sandbox.git
+     ln -s ~/src/emacs-sandbox/emacs-sandbox.sh ~/bin/emacs-sandbox.sh
+   #+end_src
+
+** Usage
+
+   The script defaults to an environment that's named =sandbox= though you can specify a different name using the =-n= flag.
+
+   When you run this script for the first time, it will create a new folder based on the name of the environment you give it and will write various pieces of elisp to the =init.el= file for that environment.
+
+   If this script finds an existing sandbox, no configuration is written and instead an Emacs instance using that configuration is launched.
+
+   You can find up-to-date usage with the =-h= flag:
+
+   #+begin_example
+     ★ main src/emacs-sandbox % emacs-sandbox.sh -h
+     Usage: emacs-sandbox.sh [-h|[-n name]|[-i config_name]]
+	    h    Print this help.
+	    n    Name of the environment to load.
+	    i    Include a configuration. Available configurations are:
+		 - melpa - Include configuration for melpa.
+		 - straight - Include configuration for straight.
+		 - minimal-ui - Config for a simpler UI.
+		 - ivy - Config for Ivy completion framework.
+		 - evil - Config for Evil mode.
+
+     Examples:
+	     emacs-sandbox.sh -i straight -i evil
+	     # Creates the default 'sandbox' environment with 'straight'
+	     # and 'evil' configuration.
+
+	     emacs-sandbox.sh -n super-secret -i melpa -i straight -i ivy
+	     # Creates the named 'super-secret' environment with 'melpa'
+	     # 'straight' and 'ivy' configuration.
+
+   #+end_example
+
+   ![Screencast of basic usage](emacs-sandbox.gif)
